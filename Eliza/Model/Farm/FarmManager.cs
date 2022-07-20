@@ -1,5 +1,4 @@
 ﻿using MessagePack;
-using System.Collections.Specialized;
 
 namespace Eliza.Model.Farm
 {
@@ -20,9 +19,9 @@ namespace Eliza.Model.Farm
         public static BitVector32Int.Section si2_soil_size_lvl => BitVector32Int.CreateSection(4, 12);
         public static BitVector32Int.Section si2_soil_exp => BitVector32Int.CreateSection(8, 16);
         public static BitVector32Int.Section si2_soil_spd_exp => BitVector32Int.CreateSection(8, 24);
-        public static BitVector32Int.Section si3_soil_num_xp => BitVector32Int.CreateSection(8);
-        public static BitVector32Int.Section si3_soil_lvl_xp => BitVector32Int.CreateSection(8, 8);
-        public static BitVector32Int.Section si3_soil_size_xp => BitVector32Int.CreateSection(8, 16);
+        public static BitVector32Int.Section si3_soil_num_exp => BitVector32Int.CreateSection(8);
+        public static BitVector32Int.Section si3_soil_lvl_exp => BitVector32Int.CreateSection(8, 8);
+        public static BitVector32Int.Section si3_soil_size_exp => BitVector32Int.CreateSection(8, 16);
         public static BitVector32Int.Section si3_soil_lvl => BitVector32Int.CreateSection(4, 24);
         public static BitVector32Int.Section si3_soil_spd_lvl => BitVector32Int.CreateSection(4, 28);
     }

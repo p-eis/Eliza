@@ -1,16 +1,17 @@
-﻿using Eliza.Model.SaveData;
+﻿using Eliza.Model;
+using Eliza.Model.Farm;
+using Eliza.Model.SaveData;
 using Eliza.UI.Widgets;
 using Eto.Forms;
 using System;
-using System.Collections.Specialized;
 
 namespace Eliza.UI.Forms
 {
     public class DataForm : Form
     {
-        private Model.SaveData.SaveData _saveData;
+        private SaveData _saveData;
 
-        public DataForm(Model.SaveData.SaveData save)
+        public DataForm(SaveData save)
         {
             _saveData = save;
 
@@ -343,76 +344,54 @@ namespace Eliza.UI.Forms
             foreach (var soil in farmData.Soil)
             {
                 
-                BitVector32 soil0 = new BitVector32((int)soil.SI0.data);
-                BitVector32.Section soil0_1 = BitVector32.CreateSection(255);
-                BitVector32.Section growthBoost = BitVector32.CreateSection(255, soil0_1);
-                BitVector32.Section soil0_3 = BitVector32.CreateSection(255, growthBoost);
-                BitVector32.Section qualityBoost = BitVector32.CreateSection(255, soil0_3);
+                BitVector32Int soil0 = soil.SI0;
+                // grow speed, 11 bits, base value?
+                //soil0[FarmManager.si0_grow_spd] = 0x7FF;
+                // grow number, 11 bits
+                soil0[FarmManager.si0_grow_num] = 0x7FF;
+                // grow level, 10 bits
+                soil0[FarmManager.si0_grow_lvl] = 0x3FF;
 
-                // Kind of influences growthBoost and sizeBoost. Won't be changed.
-                //soil0[soil0_1] = 0;
-                // Kind of influences a lot. Won't be changed.
-                //soil0[soil0_3] = 192;
+                BitVector32Int soil1 = soil.SI1;
+                // grow size, 10 bits, base value?
+                //soil1[FarmManager.si1_grow_size] = 0x3FF;
+                // def, 6 bits
+                soil1[FarmManager.si1_def] = 0x3F;
+                // hp, 8 bits
+                soil1[FarmManager.si1_hp] = 0xFF;
+                // atk, 5 bits, don't know what this is for. what does the soil attack?
+                //soil1[FarmManager.si1_atk] = 0x1F;
+                // doping, 2 bits, don't know what it is
+                //soil1[FarmManager.si1_doping] = 3;
+                // work_on_crop, 1 bit, don't know what it is
+                //soil1[FarmManager.si1_work_on_crop] = 1;
                 
-                // Growth Boost. In-game maximum is 5.
-                soil0[growthBoost] = 5;
-                // Quality boost. In-game maximum is 127.
-                soil0[qualityBoost] = 127;
+                BitVector32Int soil2 = soil.SI2;
+                // rp, 4 bits, don't know what this is for
+                //soil2[FarmManager.si2_rp] = 0xF;
+                // soil_num_lvl, 4 bits
+                soil2[FarmManager.si2_soil_num_lvl] = 0xF;
+                // soil_lvl_lvl, 4 bits
+                soil2[FarmManager.si2_soil_lvl_lvl] = 0xF;
+                // soil_size_lvl, 4 bits
+                soil2[FarmManager.si2_soil_size_lvl] = 0xF;
+                // soil_exp, 8 bits
+                soil2[FarmManager.si2_soil_exp] = 0xFF;
+                // soil_spd_exp, 8 bits
+                soil2[FarmManager.si2_soil_spd_exp] = 0xFF;
 
-                soil.SI0.data = (uint)soil0.Data;
-
-                
-                BitVector32 soil1 = new BitVector32((int)soil.SI1.data);
-                BitVector32.Section sizeMulit = BitVector32.CreateSection(255);
-                BitVector32.Section defenseBoost = BitVector32.CreateSection(255, sizeMulit);
-                BitVector32.Section healthBoost = BitVector32.CreateSection(255, defenseBoost);
-                BitVector32.Section sizeBoost = BitVector32.CreateSection(255, healthBoost);
-
-                // This and sizeBoost influence each other. Won't change this one.
-                //soil1[sizeMulit] = 255;
-
-                // Defense maxes out at 253. Kind of resets sizeBoost when set to a higher value.
-                soil1[defenseBoost] = 253;
-                soil1[healthBoost] = 255;
-                // Max value is 126. Greater value reduces in-game value.
-                soil1[sizeBoost] = 126;
-
-                soil.SI1.data = (uint)soil1.Data;
-
-
-                BitVector32 soil2 = new BitVector32((int)soil.SI2.data);
-                BitVector32.Section numberBase = BitVector32.CreateSection(255);
-                BitVector32.Section sizeBase = BitVector32.CreateSection(255, numberBase);
-                BitVector32.Section qualityBase = BitVector32.CreateSection(255, sizeBase);
-                BitVector32.Section speedLvl = BitVector32.CreateSection(255, qualityBase);
-
-                // Won't touch base values.
-                //soil2[numberBase] = 0;
-                //soil2[sizeBase] = 0;
-                //soil2[qualityBase] = 0;
-                soil2[speedLvl] = 255;
-
-                soil.SI2.data = (uint)soil2.Data;
-
-                           
-                BitVector32 soil3 = new BitVector32(0);
-                BitVector32.Section numberLvl = BitVector32.CreateSection(255);
-                BitVector32.Section qualityLvl = BitVector32.CreateSection(255, numberLvl);
-                BitVector32.Section sizeLvl = BitVector32.CreateSection(255, qualityLvl);
-                BitVector32.Section speedBase = BitVector32.CreateSection(255, sizeLvl);
-
-                // Max out soil experience points.
-                soil3[numberLvl] = 255;
-                soil3[qualityLvl] = 255;
-                soil3[sizeLvl] = 255;
-
-                // Won't touch base values.
-                //soil3[speedBase] = 0;
-
-                soil.SI3.data = (uint)soil3.Data;
+                BitVector32Int soil3 = soil.SI3;
+                // soil_num_exp, 8 bits
+                soil3[FarmManager.si3_soil_num_exp] = 0xFF;
+                // soil_lvl_xp, 8 bits
+                soil3[FarmManager.si3_soil_lvl_exp] = 0xFF;
+                // soil_size_exp, 8 bits
+                soil3[FarmManager.si3_soil_size_exp] = 0xFF;
+                // soil_lvl, 4 bits
+                soil3[FarmManager.si3_soil_lvl] = 0xF;
+                // soil_spd_lvl, 4 bits
+                soil3[FarmManager.si3_soil_spd_lvl] = 0xF;
             }
         }
-
-
     }
 }
